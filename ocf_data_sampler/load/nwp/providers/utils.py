@@ -34,6 +34,7 @@ def open_zarr_paths(
             **general_kwargs,
         ).sortby(time_dim)
     else:
+        print(zarr_path)
         ds = xr.open_dataset(
             zarr_path,
             consolidated=True,

@@ -189,7 +189,7 @@ def select_spatial_slice_pixels(
     location: Location,
     width_pixels: int,
     height_pixels: int,
-    allow_partial_slice: bool = False,
+    allow_partial_slice: bool = True,
 ) -> xr.DataArray:
     """Select spatial slice based off pixels from location point of interest.
 

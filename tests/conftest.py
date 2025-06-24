@@ -216,6 +216,35 @@ def nwp_ecmwf_zarr_path(session_tmp_path, ds_nwp_ecmwf):
     ds.to_zarr(zarr_path)
     yield zarr_path
 
+
+@pytest.fixture(scope="session")
+def merra2_zarr_path(session_tmp_path):
+    """Create a synthetic old-format aerosol Zarr for testing."""
+
+    time = pd.date_range("2024-01-01 00:30", periods=48, freq="H")
+    lat = np.linspace(6.5, 33.5, 55)
+    lon = np.linspace(69.38, 90.0, 34)
+    features = ["ALBEDO", "DUSMASS", "TOTANGSTR", "TOTEXTTAU"]
+
+    data = np.random.rand(len(features), len(time), len(lat), len(lon)).astype(np.float32)
+
+    ds = xr.Dataset(
+        data_vars={
+            "combined_variable": (("feature", "time", "lat", "lon"), data)
+        },
+        coords={
+            "feature": features,
+            "time": time,
+            "lat": lat,
+            "lon": lon,
+        }
+    )
+
+    zarr_path = session_tmp_path / "synthetic_merra2.zarr"
+    ds.chunk({"feature": 1, "time": 24, "lat": 55, "lon": 34}).to_zarr(zarr_path)
+    return zarr_path
+
+
 @pytest.fixture(scope="session")
 def icon_eu_zarr_path(session_tmp_path):
     date = "20211101"

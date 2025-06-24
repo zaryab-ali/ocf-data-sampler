@@ -107,7 +107,7 @@ def select_time_slice_nwp(
     step_indexer = xr.DataArray(steps, coords=coords)
 
     if len(accum_channels) == 0:
-        da_sel = da.sel(step=step_indexer, init_time_utc=init_time_indexer)
+        da_sel = da.sel(step=step_indexer, init_time_utc=init_time_indexer, method="nearest",)
     else:
         # First minimise the size of the dataset we are diffing
         # - find the init times we are slicing from
